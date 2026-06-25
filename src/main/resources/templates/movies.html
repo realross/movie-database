@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- ... -->
+</head>
+<body>
+<div style="text-align: right; padding: 10px;">
+    Привет, <span th:text="${user.login}"></span>
+    <a th:href="@{/logout}">Выйти</a>
+</div>
+<h2 style="text-align:center;">Фильмы</h2>
+<div style="text-align: center; margin-bottom: 10px;">
+    <a th:href="@{/movies/new}" style="font-size: 18px;">➕ Добавить фильм</a>
+</div>
+<table border="1">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Название</th>
+        <th>Год</th>
+        <th>Жанр</th>
+        <th>Общий рейтинг</th>
+        <th>Постер</th>
+        <th>Видео</th>
+        <th>Моя оценка</th>
+        <th>Действие</th>
+        <th>Управление</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="movie : ${movies}">
+        <td th:text="${movie.id}">1</td>
+        <td th:text="${movie.name}">Название</td>
+        <td th:text="${movie.year}">2020</td>
+        <td th:text="${movie.genre}">Драма</td>
+        <td th:text="${movie.rating != null ? movie.rating : '—'}">8.5</td>
+        <td><a th:href="${movie.posterUrl}" target="_blank">Смотреть постер</a></td>
+        <td><a th:href="${movie.videoUrl}" target="_blank">Смотреть видео</a></td>
+        <td>
+                    <span th:if="${userRatings.containsKey(movie.id)}"
+                          th:text="${userRatings.get(movie.id)}"
+                          class="current-rating">
+                    </span>
+            <span th:unless="${userRatings.containsKey(movie.id)}">—</span>
+        </td>
+        <td>
+            <form th:action="@{/rate}" method="post" class="rating-form">
+                <input type="hidden" name="movieId" th:value="${movie.id}" />
+                <select name="rating">
+                    <option th:each="i : ${#numbers.sequence(1, 10)}"
+                            th:value="${i}"
+                            th:selected="${userRatings.containsKey(movie.id) and userRatings.get(movie.id) == i}">
+                        <span th:text="${i}"></span>
+                    </option>
+                </select>
+                <button type="submit">Оценить</button>
+            </form>
+        </td>
+        <td>
+            <a th:href="@{/movies/delete/{id}(id=${movie.id})}"
+               onclick="return confirm('Удалить фильм?')"
+               style="color: red;">🗑️</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
