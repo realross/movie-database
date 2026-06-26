@@ -29,14 +29,11 @@ public class MovieService {
         userMovie.setMovie(movie);
         usermovierepository.save(userMovie);
 
-        // После сохранения оценки пересчитываем средний рейтинг фильма
         updateMovieAverageRating(movieId);
     }
 
     public void updateMovieAverageRating(Integer movieId) {
-        // Получаем среднее значение оценок для фильма
         Double avgRating = usermovierepository.calculateAverageRatingByMovieId(movieId);
-        // Если оценок нет, avgRating будет null – тогда ставим 0 или null
         Movie movie = movieRepository.findById(movieId)
                 .orElseThrow(() -> new RuntimeException("Фильм не найден"));
         movie.setRating(avgRating != null ? avgRating : 0.0);
@@ -50,8 +47,6 @@ public class MovieService {
 
     @Transactional
     public void deleteMovie(Integer id) {
-        // Если у вас настроен ON DELETE CASCADE в БД, то записи UserMovies удалятся автоматически.
-        // Если нет – удаляем вручную:
         // userMovieRepository.deleteByMovieId(id);
         movieRepository.deleteById(id);
     }
