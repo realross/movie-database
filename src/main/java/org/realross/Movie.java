@@ -23,10 +23,10 @@ public class Movie {
     private String genre;
 
     @Column(name = "Title")
-    private String posterUrl;   // ссылка на постер
+    private String posterUrl;
 
     @Column(name = "Site")
-    private String videoUrl;    // ссылка на видео
+    private String videoUrl;
 
     @Column(name = "rating")
     private Double rating;
