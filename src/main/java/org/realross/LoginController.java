@@ -19,20 +19,17 @@ public class LoginController {
     private final MovieService movieService;
     private final UserMovieRepository usermovierepository;
 
-    // Страница логина
     @GetMapping("/login")
     public String loginPage() {
         return "login";
     }
 
-    // Обработка логина
     @PostMapping("/login")
     public String login(@RequestParam("login") String login,
                         HttpSession session,
                         Model model) {
         Optional<User> userOpt = userService.findByLogin(login);
         if (userOpt.isPresent()) {
-            // Сохраняем пользователя в сессии
             session.setAttribute("user", userOpt.get());
             return "redirect:/movies";
         } else {
@@ -68,7 +65,6 @@ public class LoginController {
         return "redirect:/movies";
     }
 
-    // Список фильмов (только для авторизованных)
     @GetMapping("/movies")
     public String movies(HttpSession session, Model model) {
         User user = (User) session.getAttribute("user");
@@ -76,7 +72,6 @@ public class LoginController {
             return "redirect:/login";
         }
         List<Movie> movies = movieService.getAllMovies();
-        // Собираем оценки пользователя
         Map<Integer, Double> userRatings = new HashMap<>();
         for (Movie movie : movies) {
             UserMovieID id = new UserMovieID(user.getId(), movie.getId());
@@ -89,7 +84,6 @@ public class LoginController {
         return "movies";
     }
 
-    // Выход
     @GetMapping("/logout")
     public String logout(HttpSession session) {
         session.invalidate();
