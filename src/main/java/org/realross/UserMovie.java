@@ -7,7 +7,7 @@ import lombok.*;
 @Table(name = "UserMovies")
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
 public class UserMovie {
-
+ 
     @EmbeddedId
     private UserMovieID id;
 
