@@ -20,7 +20,6 @@ public class UserMovie {
     @Column(name = "Favorite")
     private Boolean favorite;
 
-    // Связи (опционально, для удобства)
     @ManyToOne
     @MapsId("UserID")
     @JoinColumn(name = "User_ID")
